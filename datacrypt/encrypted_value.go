@@ -1,4 +1,4 @@
-package decryptor
+package datacrypt
 
 import (
 	"bytes"
@@ -11,9 +11,9 @@ import (
 	"fmt"
 )
 
-// EncryptedDataBagValue contains the values found for each item in an encrypted
-// datq bag. This implementation assumes the data bags were encrypted using version 2.
-type EncryptedDataBagValue struct {
+// EncryptedValue contains the values found for each item in an encrypted
+// data bag. This implementation assumes the data bags were encrypted using version 2.
+type EncryptedValue struct {
 	encryptedData []byte
 	hmac          []byte
 	iv            []byte
@@ -21,11 +21,11 @@ type EncryptedDataBagValue struct {
 	cipher        string
 }
 
-// NewEncryptedDataBagValue is a constructor that takes a chef.DataBagItem interface,
-// initializes an EncryptedDataBagValue, and returns its pointer.
-func NewEncryptedDataBagValue(encryptedValues interface{}) *EncryptedDataBagValue {
+// NewEncryptedValue is a constructor that takes a chef.DataBagItem interface,
+// initializes an EncryptedValue, and returns its pointer.
+func NewEncryptedValue(encryptedValues interface{}) *EncryptedValue {
 	if values, ok := encryptedValues.(map[string]interface{}); ok {
-		obj := new(EncryptedDataBagValue)
+		obj := new(EncryptedValue)
 
 		// Use type assertions to delineate between string and []byte types.
 		if v, ok := values["encrypted_data"]; ok {
@@ -55,8 +55,7 @@ func NewEncryptedDataBagValue(encryptedValues interface{}) *EncryptedDataBagValu
 			}
 		}
 
-		// Go may interpret `version` as a float64, so use a type assertion to
-		// check for that and int.
+		// Go may interpret `version` as a float64 instead of an int`, so use a type assertion.
 		if v, ok := values["version"]; ok {
 			switch t := v.(type) {
 			case int:
@@ -76,8 +75,8 @@ func NewEncryptedDataBagValue(encryptedValues interface{}) *EncryptedDataBagValu
 }
 
 // DecryptValue takes an encryption secret and returns the decrypted value of the
-// underlying EncryptedDataBagValue or an error if any occurs.
-func (obj *EncryptedDataBagValue) DecryptValue(secret []byte) (string, error) {
+// underlying EncryptedValue or an error if any occurs.
+func (obj *EncryptedValue) DecryptValue(secret []byte) (string, error) {
 	err := obj.validateHmac(secret)
 	if err != nil {
 		return "", err
@@ -111,7 +110,7 @@ func (obj *EncryptedDataBagValue) DecryptValue(secret []byte) (string, error) {
 
 // validateHmac performs an extra HMAC check, required by version 2 encryption algorithm
 // It returns an error if the HMAC is invalid.
-func (obj *EncryptedDataBagValue) validateHmac(secret []byte) error {
+func (obj *EncryptedValue) validateHmac(secret []byte) error {
 	candidateHmacBytes, err := base64.StdEncoding.DecodeString(string(obj.hmac))
 	if err != nil {
 		return err
@@ -130,7 +129,7 @@ func (obj *EncryptedDataBagValue) validateHmac(secret []byte) error {
 
 // parseJSON takes the decrypted raw data, which is a marshaled JSON string, and retrieves
 // and returns the actual value we care about.
-func (obj *EncryptedDataBagValue) parseJSON(byteSlice []byte) (string, error) {
+func (obj *EncryptedValue) parseJSON(byteSlice []byte) (string, error) {
 	reader := bytes.NewReader(byteSlice)
 	seenKey := false
 

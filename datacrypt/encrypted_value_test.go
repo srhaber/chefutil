@@ -1,13 +1,13 @@
-package decryptor
+package datacrypt
 
 import (
 	"bytes"
 	"testing"
 )
 
-func TestNewEncryptedDataBagValue(t *testing.T) {
-	encryptedValues := testEncryptedDataBagValueFixture()
-	obj := NewEncryptedDataBagValue(encryptedValues)
+func TestNewEncryptedValue(t *testing.T) {
+	encryptedValues := testEncryptedValueFixture()
+	obj := NewEncryptedValue(encryptedValues)
 
 	if !bytes.Equal(encryptedValues["encrypted_data"].([]byte), obj.encryptedData) {
 		t.Error("encryptedData field not correctly set in struct")
@@ -30,15 +30,15 @@ func TestNewEncryptedDataBagValue(t *testing.T) {
 	}
 }
 
-func TestNewEncryptedDataBagValue_nil(t *testing.T) {
-	obj := NewEncryptedDataBagValue("blah")
+func TestNewEncryptedValue_nil(t *testing.T) {
+	obj := NewEncryptedValue("blah")
 	if obj != nil {
 		t.Error("Invalid argument to constructor should return nil")
 	}
 }
 
 func TestValidateHmac(t *testing.T) {
-	obj := NewEncryptedDataBagValue(testEncryptedDataBagValueFixture())
+	obj := NewEncryptedValue(testEncryptedValueFixture())
 
 	// Should be good
 	err := obj.validateHmac(testEncryptedDataBagSecret())
@@ -54,7 +54,7 @@ func TestValidateHmac(t *testing.T) {
 }
 
 func TestDecryptValue(t *testing.T) {
-	obj := NewEncryptedDataBagValue(testEncryptedDataBagValueFixture())
+	obj := NewEncryptedValue(testEncryptedValueFixture())
 
 	val, err := obj.DecryptValue(testEncryptedDataBagSecret())
 	if err != nil {
@@ -68,7 +68,7 @@ func TestDecryptValue(t *testing.T) {
 
 // Helper functions
 
-func testEncryptedDataBagValueFixture() map[string]interface{} {
+func testEncryptedValueFixture() map[string]interface{} {
 	return map[string]interface{}{
 		"encrypted_data": []byte("AKyDsX/eiYImvjJljM8By3zi6fR7ekqhqEY1sPSOYK0=\n"),
 		"hmac":           []byte("CDtQRHLtY1ohbnH27BEm6hxskEsj/lLa45SHHZHoABQ=\n"),

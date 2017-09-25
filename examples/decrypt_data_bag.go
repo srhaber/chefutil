@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/go-chef/chef"
-	dec "github.com/srhaber/data-bag-decryptor"
+	"github.com/srhaber/chefutil/datacrypt"
 )
 
 // To run this example, start a chef-zero server:
@@ -45,18 +45,19 @@ func main() {
 		fmt.Println("Error getting item:", err)
 	}
 
-	// Build a DataBagDecryptor
-	decryptor := &dec.DataBagDecryptor{
+	// Build a DataDecryptor
+	decryptor := &datacrypt.DataDecryptor{
 		Item:   item.(map[string]interface{}),
 		Secret: encryptedDataBagSecret,
 	}
 
 	// Decrypt the item
-	decryptedItem, err := decryptor.DecryptItem()
+	decryptedItem, err := decryptor.Decrypt()
 	if err != nil {
 		fmt.Println("Error decrypting item:", err)
 	}
 
 	// Print the decryped item
 	fmt.Println("Got item:", decryptedItem)
+	// Output: Got item: map[id:my-item hello:world]
 }

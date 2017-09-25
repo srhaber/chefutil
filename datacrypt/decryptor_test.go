@@ -1,16 +1,16 @@
-package decryptor
+package datacrypt
 
 import (
 	"testing"
 )
 
-func TestDecryptItem(t *testing.T) {
-	d := &DataBagDecryptor{
+func TestDecrypt(t *testing.T) {
+	d := &DataDecryptor{
 		Item:   testEncryptedDataBagFixture(),
 		Secret: testEncryptedDataBagSecret(),
 	}
 
-	dataBagItem, err := d.DecryptItem()
+	dataBagItem, err := d.Decrypt()
 	if err != nil {
 		t.Error("Got error: ", err)
 	}
