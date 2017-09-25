@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-  "io/ioutil"
+	"io/ioutil"
 	"os"
 
 	"github.com/go-chef/chef"
@@ -18,17 +18,17 @@ import (
 //    knife data bag create my-bag my-item --server-url=http://127.0.0.1:8889 --secret=abcdef1234
 //
 func main() {
-  // Read a client key
-  key, err := ioutil.ReadFile("example_key.pem")
-  if err != nil {
-    fmt.Println("Couldn't read example_key.pem:", err)
-    os.Exit(1)
-  }
+	// Read a client key
+	key, err := ioutil.ReadFile("example_key.pem")
+	if err != nil {
+		fmt.Println("Couldn't read example_key.pem:", err)
+		os.Exit(1)
+	}
 
 	// Build a client
 	client, err := chef.NewClient(&chef.Config{
-    Name: "MyName",
-    Key: string(key),
+		Name:    "MyName",
+		Key:     string(key),
 		BaseURL: "http://127.0.0.1:8889",
 	})
 
@@ -57,6 +57,6 @@ func main() {
 		fmt.Println("Error decrypting item:", err)
 	}
 
-  // Print the decryped item
+	// Print the decryped item
 	fmt.Println("Got item:", decryptedItem)
 }
