@@ -120,10 +120,10 @@ func (obj *EncryptedDataBagValue) parseJSON(byteSlice []byte) (string, error) {
 	// The marshaled JSON string is `{"json_wrapper":"the_value"}`
 	dec := json.NewDecoder(reader)
 
-  // Sometimes the byteSlice contains junk data after the last JSON delim `}`
-  // This junk data causes the Unmarshal function to fail. As a workaround,
-  // we parse the JSON one token at a time until we get the desired token.
-  // We can do this since we have a well-defined marshaled string of the JSON object
+	// Sometimes the byteSlice contains junk data after the last JSON delim `}`
+	// This junk data causes the Unmarshal function to fail. As a workaround,
+	// we parse the JSON one token at a time until we get the desired token.
+	// We can do this since we have a well-defined marshaled string of the JSON object
 	for {
 		t, err := dec.Token()
 		if err != nil {
