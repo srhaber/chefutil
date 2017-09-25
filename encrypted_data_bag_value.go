@@ -51,7 +51,12 @@ func NewEncryptedDataBagValue(encryptedValues interface{}) *EncryptedDataBagValu
 		}
 
 		if v, ok := values["version"]; ok {
-			obj.version = v.(int)
+			switch t := v.(type) {
+			case int:
+				obj.version = t
+			case float64:
+				obj.version = int(t)
+			}
 		}
 
 		if v, ok := values["cipher"]; ok {
