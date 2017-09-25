@@ -6,8 +6,8 @@ import (
 
 func TestDecryptItem(t *testing.T) {
 	d := &DataBagDecryptor{
-		item:   testEncryptedDataBagFixture(),
-		secret: testEncryptedDataBagSecret(),
+		Item:   testEncryptedDataBagFixture(),
+		Secret: testEncryptedDataBagSecret(),
 	}
 
 	dataBagItem, err := d.DecryptItem()

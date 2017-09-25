@@ -3,23 +3,23 @@ package chef
 import (
 	"sync"
 
-	chefc "github.com/go-chef/chef"
+	"github.com/go-chef/chef"
 )
 
 type DataBagDecryptor struct {
-	item   map[string]interface{}
-	secret []byte
+	Item   map[string]interface{}
+	Secret []byte
 }
 
-func (d *DataBagDecryptor) DecryptItem() (chefc.DataBagItem, error) {
+func (d *DataBagDecryptor) DecryptItem() (chef.DataBagItem, error) {
 	item := map[string]string{
-		"id": d.item["id"].(string),
+		"id": d.Item["id"].(string),
 	}
 
 	var wg sync.WaitGroup
 	var mux sync.Mutex
 
-	for key, encryptedValue := range d.item {
+	for key, encryptedValue := range d.Item {
 		if key == "id" {
 			continue
 		}
@@ -40,7 +40,7 @@ func (d *DataBagDecryptor) DecryptItem() (chefc.DataBagItem, error) {
 				mux.Unlock()
 			}(ch)
 
-			val, _ := e.DecryptValue(d.secret)
+			val, _ := e.DecryptValue(d.Secret)
 			ch <- val
 		}(encryptedVal, key)
 	}
