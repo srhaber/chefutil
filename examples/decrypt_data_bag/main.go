@@ -1,3 +1,12 @@
+// To run this example, start a chef-zero server:
+//
+//    chef-zero --log-level debug
+//
+// Add an encrypted data bag and populate it with some key-vals.
+//
+//    knife data bag create my-bag my-item --server-url=http://127.0.0.1:8889 --secret=abcdef1234
+//
+
 package main
 
 import (
@@ -9,14 +18,6 @@ import (
 	"github.com/srhaber/chefutil/datacrypt"
 )
 
-// To run this example, start a chef-zero server:
-//
-//    chef-zero --log-level debug
-//
-// Add an encrypted data bag and populate it with some key-vals.
-//
-//    knife data bag create my-bag my-item --server-url=http://127.0.0.1:8889 --secret=abcdef1234
-//
 func main() {
 	// Read a client key
 	key, err := ioutil.ReadFile("example_key.pem")
