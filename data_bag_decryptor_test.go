@@ -1,4 +1,4 @@
-package chef
+package decryptor
 
 import (
 	"testing"

@@ -1,4 +1,4 @@
-package chef
+package decryptor
 
 import (
 	"bytes"
@@ -41,15 +41,15 @@ func TestValidateHmac(t *testing.T) {
 	obj := NewEncryptedDataBagValue(testEncryptedDataBagValueFixture())
 
 	// Should be good
-	err := obj.ValidateHmac(testEncryptedDataBagSecret())
+	err := obj.validateHmac(testEncryptedDataBagSecret())
 	if err != nil {
 		t.Error(err)
 	}
 
 	// Should be invalid
-	err = obj.ValidateHmac([]byte("wrong_secret"))
+	err = obj.validateHmac([]byte("wrong_secret"))
 	if err == nil {
-		t.Error("ValidateHmac should not succeed with incorrect secret")
+		t.Error("validateHmac should not succeed with incorrect secret")
 	}
 }
 
